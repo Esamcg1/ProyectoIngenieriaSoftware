@@ -5,6 +5,10 @@ from styles import styles
 import subprocess 
 
 # validar el logn
+def registro_usuario():
+    ventana.destroy()
+    subprocess.Popen(['python', 'registro.py'])
+
 def validar_login():
     usuario = entry_usuario.get()
     password = entry_password.get()
@@ -55,6 +59,10 @@ entry_password.pack(pady=5)
 boton_login = tk.Button(ventana, text="Iniciar sesión", command=validar_login)
 styles.style_button(boton_login)  # Aplicar estilo al botón
 boton_login.pack(pady=10)
+
+boton_crear_usuario = tk.Button(ventana, text="Crear Usuario", command=registro_usuario)
+styles.style_button(boton_crear_usuario)  # Aplicar estilo al botón
+boton_crear_usuario.pack(pady=10)
 
 # Ejecutar la interfaz gráfica
 ventana.mainloop()

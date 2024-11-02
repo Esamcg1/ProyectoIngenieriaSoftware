@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import main_tkinter
 from styles import styles
+from conexion.conexion import obtener_conexion
 # Crear la ventana principal
 root = tk.Tk()
 root.configure(bg="#2E2E2E")
