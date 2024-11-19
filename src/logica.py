@@ -1,10 +1,10 @@
-
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 import os
 import base64
-
+import random
+import string
 # Función para cifrar con AES-256
 def encrypt_aes256(text, key):
     key = key.ljust(32)[:32].encode('utf-8')  # Ajustar la clave a 32 bytes
@@ -69,6 +69,10 @@ def generate_md5(text):
 # Función para generar hash SHA-256
 def generate_sha256(text):
     return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+def generate_random_password(length=12):
+    chars = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choice(chars) for _ in range(length))
 
 
 #:)

@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 from conexion.conexion import obtener_conexion
 from styles import styles
-import subprocess 
-
-# validar el logn
+import subprocess
+from conexion import consultas
+# validar el login
 def registro_usuario():
     ventana.destroy()
     subprocess.Popen(['python', 'registro.py'])
@@ -14,18 +14,22 @@ def validar_login():
     password = entry_password.get()
     
     try:
-        # Obtener la conexión 
+        # Obtener la conexión
         conn = obtener_conexion()
         cursor = conn.cursor()
         
         # Consulta a SQL
-        consulta = "SELECT * FROM usuario WHERE usuario = ? AND pass = ?"
+        consulta = consultas.consulta4
         cursor.execute(consulta, (usuario, password))
         
         # Verificar si existe el registro
         resultado = cursor.fetchone()
         if resultado:
-            messagebox.showinfo("Inicio de sesión", "Inicio de sesión exitoso.")
+            nombre_usuario = resultado[0]
+            # Guardar el nombre del usuario en un archivo temporal
+            with open("usuario_actual.txt", "w") as file:
+                file.write(nombre_usuario)
+            messagebox.showinfo("Inicio de sesión", f"Inicio de sesión exitoso. Bienvenido, {nombre_usuario}.")
             ventana.destroy()  # cerrar el login
             subprocess.Popen(['python', 'main.py'])  # Abre main.py
         else:
@@ -43,7 +47,6 @@ ventana = tk.Tk()
 ventana.title("Inicio de Sesión")
 ventana.geometry("400x275")
 ventana.configure(bg="#2E2E2E")
-
 
 label_usuario = tk.Label(ventana, text="Usuario:", bg="#2E2E2E", fg="#C6FF62", font=styles.font_style)
 label_usuario.pack(pady=5)

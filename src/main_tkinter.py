@@ -28,6 +28,24 @@ def encrypt_text(text_entry, key_entry, algorithm_var):
 
     id_algoritmo = result[0]  # Este es el ID que corresponde al nombre del algoritmo
 
+    # Leer el usuario actual desde el archivo temporal
+    try:
+        with open("usuario_actual.txt", "r") as file:
+            nombre_usuario = file.read().strip()
+    except FileNotFoundError:
+        messagebox.showerror("Error", "No se encontró el archivo de usuario actual.")
+        return
+
+    # Obtener el id_usuario a partir del nombre de usuario
+    cursor.execute("SELECT id_usuario FROM usuario WHERE nombre = ?", (nombre_usuario,))
+    result = cursor.fetchone()
+    if result is None:
+        messagebox.showerror("Error", "Usuario no encontrado en la base de datos.")
+        return
+
+    id_usuario = result[0]  # Este es el ID del usuario
+
+    # Proceso de cifrado
     if algorithm_name == 'MD5':
         result = generate_md5(text)
         messagebox.showinfo("Resultado", f"Algoritmo: {algorithm_name}\nMD5 Hash: {result}")
@@ -50,9 +68,9 @@ def encrypt_text(text_entry, key_entry, algorithm_var):
 
     # Guardar datos en la base de datos
     cursor.execute("""
-        INSERT INTO cadenas (texto, clave, id_algoritmo, texto_cifrado)
-        VALUES (?, ?, ?, ?)
-    """, (text, key, id_algoritmo, encrypted_value))
+        INSERT INTO cadenas (texto, clave, id_algoritmo, texto_cifrado, id_usuario)
+        VALUES (?, ?, ?, ?, ?)
+    """, (text, key, id_algoritmo, encrypted_value, id_usuario))
     
     conn.commit()
     cursor.close()

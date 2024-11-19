@@ -3,6 +3,7 @@ from tkinter import messagebox
 from conexion.conexion import obtener_conexion
 from styles import styles
 import subprocess 
+from conexion import consultas
 
 def registrar_usuario():
     nombre = entry_nombre.get()
@@ -20,7 +21,7 @@ def registrar_usuario():
         conn = obtener_conexion()
         cursor = conn.cursor()
 
-        consulta = "INSERT INTO usuario (nombre, apellido, edad, correo, usuario, pass) VALUES (?, ?, ?, ?, ?, ?);"
+        consulta = consultas.consulta5
         cursor.execute(consulta, (nombre, apellido, edad, correo, usuario, password))
         conn.commit()
 
