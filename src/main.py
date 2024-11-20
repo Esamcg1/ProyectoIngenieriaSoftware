@@ -111,17 +111,3 @@ close_btn.pack(pady=(30, 5))
 # Ejecutar la ventana principal
 root.mainloop()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-

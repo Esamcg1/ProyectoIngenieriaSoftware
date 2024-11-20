@@ -107,3 +107,25 @@ def registrar_usuario(nombre, apellido, edad, correo, usuario, password, ventana
         messagebox.showerror("Error de conexión", f"No se pudo conectar a la base de datos: {e}")
 
 
+def obtener_contrasenas_usuario(id_usuario):
+    """
+    Recupera las contraseñas generadas por el usuario actual de la base de datos.
+    """
+    try:
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+
+        # Consulta para obtener las contraseñas del usuario
+        id_usuario = obtener_id_usuario(nombre_usuario, cursor)
+        query = "SELECT pass_sugerida FROM pass_sugerida WHERE id_usuario = ?"
+        cursor.execute(query, (id_usuario,))
+        resultados = cursor.fetchall()
+
+        # Extraer solo las contraseñas como una lista
+        return [fila[0] for fila in resultados]
+    except Exception as e:
+        messagebox.showerror("Error", f"Error al obtener contraseñas: {str(e)}")
+        return []
+    finally:
+        if conexion:
+            conexion.close()
