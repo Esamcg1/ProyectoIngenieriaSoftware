@@ -24,27 +24,38 @@ def obtener_id_algoritmo(nombre_algoritmo, cursor):
 
 
                     #Metodo para verificar la seguridad de una contrasena en main.py
+
 def verificar_seguridad(password):
+    # Listado de contraseñas comunes y secuencias típicas
+    comunes = ["password", "123456", "qwerty", "abc123", "111111", "123123", "letmein", "iloveyou", "admin", "root", "sa", ""]
+    secuencias = r'(1234|abcd|qwerty|asdf|zxcv|password|5678|8765|0987|4321|123456789|987654321|9876543210|1234567890)'
     
-    # Criterios para evaluar la seguridad
-    if len(password) < 8:
-        resultado = "Débil: La contraseña debe tener al menos 8 caracteres."
+    # Verificar longitud mínima
+    if len(password) < 12:
+        resultado = "Débil: La contraseña debe tener al menos 12 caracteres."
+    # Verificar al menos una letra mayúscula
     elif not re.search(r'[A-Z]', password):
         resultado = "Débil: La contraseña debe incluir al menos una letra mayúscula."
+    # Verificar al menos una letra minúscula
     elif not re.search(r'[a-z]', password):
         resultado = "Débil: La contraseña debe incluir al menos una letra minúscula."
+    # Verificar al menos un número
     elif not re.search(r'\d', password):
         resultado = "Débil: La contraseña debe incluir al menos un número."
+    # Verificar al menos un carácter especial
     elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
         resultado = "Débil: La contraseña debe incluir al menos un carácter especial."
-    elif password.lower() in ["password", "123456", "qwerty", "abc123"]:  # Evitar patrones comunes
-        resultado = "Débil: La contraseña es demasiado común."
+    # Verificar si es una contraseña común
+    elif password.lower() in comunes or re.search(secuencias, password.lower()):
+        resultado = "Débil: La contraseña es demasiado común o predecible."
+    # Verificar caracteres repetidos consecutivos (máximo 3 iguales consecutivos)
+    elif re.search(r'(.)\1{3,}', password):
+        resultado = "Débil: La contraseña contiene demasiados caracteres repetidos consecutivos."
     else:
         resultado = "Fuerte: La contraseña es segura."
     
     # Mostrar el resultado al usuario
     messagebox.showinfo("Seguridad de la Contraseña", resultado)
-
 
 
                     #Metodo para generar una contrasena en main.py
@@ -129,3 +140,43 @@ def obtener_contrasenas_usuario(id_usuario):
     finally:
         if conexion:
             conexion.close()
+
+
+def validar_login(usuario, password):
+    try:
+        # Obtener la conexión
+        conn = obtener_conexion()
+        cursor = conn.cursor()
+        
+        # Consulta para validar usuario
+        consulta = consultas.consulta4
+        cursor.execute(consulta, (usuario, password))
+        
+        # Verificar si existe el registro
+        resultado = cursor.fetchone()
+        if resultado:
+            nombre_usuario = resultado[0]
+            
+            # Obtener el ID del usuario
+            consulta_id_usuario = "SELECT id_usuario FROM usuario WHERE usuario = ?"
+            cursor.execute(consulta_id_usuario, (usuario,))
+            id_usuario = cursor.fetchone()[0]
+            
+            # Insertar el registro de inicio de sesión
+            consulta_insert_login = consultas.consulta6
+            cursor.execute(consulta_insert_login, (id_usuario,))
+            conn.commit()
+            
+            # Retornar éxito y datos del usuario
+            return True, nombre_usuario
+        else:
+            # Retornar fallo de autenticación
+            return False, "Usuario o contraseña incorrectos."
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        
+    except Exception as e:
+        # Manejar errores de conexión
+        return False, f"Error de conexión: {e}"

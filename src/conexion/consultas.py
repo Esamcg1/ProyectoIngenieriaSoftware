@@ -20,3 +20,8 @@ consulta5 = "INSERT INTO usuario (nombre, apellido, edad, correo, usuario, pass)
 #Obtener el ID del algoritmo a partir de la seleccion dada por el usuario en main_tkinter
 
 
+# Insertar un registro de inicio de sesión en registro_logins
+consulta6 = "INSERT INTO registro_logins (id_usuario) VALUES (?)"
+
+#Obtener el ID del usuario para registrar el registro en registro_logins
+consulta7 = "SELECT id_usuario FROM usuario WHERE usuario = ?"
