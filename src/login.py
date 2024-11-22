@@ -5,6 +5,7 @@ from styles import styles
 import subprocess
 from conexion import consultas
 from funciones.funciones import validar_login
+from styles import elements
 # validar el login
 def registro_usuario():
     ventana.destroy()
@@ -29,27 +30,51 @@ def on_login():
 # Configuración de la interfaz gráfica
 ventana = tk.Tk()
 ventana.title("Inicio de Sesión")
-ventana.geometry("400x275")
-ventana.configure(bg="#2E2E2E")
+ventana.geometry("400x350")
+ventana.configure(bg="#1E1E2E")
+# Encabezado llamativo
+header = tk.Label(
+    ventana, text="Bienvenido", font=("Helvetica", 18, "bold"), 
+    fg="#FFD700", bg="#1E1E2E", pady=10
+)
+header.pack()
 
-label_usuario = tk.Label(ventana, text="Usuario:", bg="#2E2E2E", fg="#C6FF62", font=styles.font_style)
+# Campos de usuario
+label_usuario = tk.Label(
+    ventana, text="Usuario:", bg="#1E1E2E", fg="#FFFFFF", font=styles.font_style()
+)
 label_usuario.pack(pady=5)
-entry_usuario = tk.Entry(ventana, width=30, font=styles.font_style)
+entry_usuario = tk.Entry(
+    ventana, width=30, font=styles.font_style(), bd=2, relief="solid"
+)
 entry_usuario.pack(pady=5)
 
-label_password = tk.Label(ventana, text="Contraseña:", bg="#2E2E2E", fg="#C6FF62", font=styles.font_style)
+# Campos de contraseña
+label_password = tk.Label(
+    ventana, text="Contraseña:", bg="#1E1E2E", fg="#FFFFFF", font=styles.font_style()
+)
 label_password.pack(pady=5)
-entry_password = tk.Entry(ventana, show="*", width=30, font=styles.font_style)
+entry_password = tk.Entry(
+    ventana, show="*", width=30, font=styles.font_style(), bd=2, relief="solid"
+)
 entry_password.pack(pady=5)
 
 # Botón de inicio de sesión
 boton_login = tk.Button(ventana, text="Iniciar sesión", command=on_login)
 styles.style_button(boton_login)  # Aplicar estilo al botón
-boton_login.pack(pady=10)
+boton_login.pack(pady=15)
 
+# Botón de registro de usuario
 boton_crear_usuario = tk.Button(ventana, text="Crear Usuario", command=registro_usuario)
 styles.style_button(boton_crear_usuario)  # Aplicar estilo al botón
-boton_crear_usuario.pack(pady=10)
+boton_crear_usuario.pack(pady=5)
+
+# Footer
+footer = tk.Label(
+    ventana, text="© 2024 Mi app UDV", bg="#1E1E2E", fg="#8A8A8A", 
+    font=("Helvetica", 10, "italic")
+)
+footer.pack(side="bottom", pady=10)
 
 # Ejecutar la interfaz gráfica
 ventana.mainloop()

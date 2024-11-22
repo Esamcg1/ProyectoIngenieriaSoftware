@@ -76,14 +76,27 @@ def encrypt_text(text_entry, key_entry, algorithm_var):
     cursor.close()
     conn.close()
 
-    # Mostrar el texto cifrado
+        # Mostrar el texto cifrado
     result_window = tk.Toplevel()
     result_window.title("Texto cifrado")
-    result_window.configure(bg="#2E2E2E")
+    result_window.configure(bg="#1E1E2E")
     result_window.geometry("450x300")
-    tk.Label(result_window, bg="#2E2E2E", fg="#C6FF62", font=styles.font_style, text=f"Algoritmo utilizado: {algorithm_name}").pack(pady=5)
-    tk.Label(result_window, bg="#2E2E2E", fg="#C6FF62", font=styles.font_style, text=f"Texto cifrado:\n{encrypted_value}").pack(pady=5)
-    tk.Label(result_window, bg="#2E2E2E", fg="#C6FF62", font=styles.font_style, text=f"Clave utilizada:\n{key}").pack(pady=5)
+
+    # Etiquetas con estilos
+    tk.Label(
+        result_window, bg="#1E1E2E", fg="#FFFFFF", font=styles.font_style(),
+        text=f"Algoritmo utilizado: {algorithm_name}"
+    ).pack(pady=5)
+
+    tk.Label(
+        result_window, bg="#1E1E2E", fg="#FFFFFF", font=styles.font_style,
+        text=f"Texto cifrado:\n{encrypted_value}"
+    ).pack(pady=5)
+
+    tk.Label(
+        result_window, bg="#1E1E2E", fg="#FFFFFF", font=styles.font_style,
+        text=f"Clave utilizada:\n{key}"
+    ).pack(pady=5)
 
     # Botón para copiar el texto cifrado al portapapeles
     def copy_to_clipboard():
@@ -92,12 +105,12 @@ def encrypt_text(text_entry, key_entry, algorithm_var):
         messagebox.showinfo("Copiado", "Texto cifrado copiado al portapapeles.")
 
     copy_btn = tk.Button(result_window, text="Copiar texto cifrado", command=copy_to_clipboard)
-    styles.style_button_copy_text(copy_btn)
+    styles.style_button_copy_text(copy_btn)  # Aplica el estilo personalizado
     copy_btn.pack(pady=10)
-    
-    # Cerrar la ventana secundaria
+
+    # Botón para cerrar la ventana secundaria
     close_btn = tk.Button(result_window, text="Cerrar", command=result_window.destroy)
-    styles.style_button_close(close_btn)
+    styles.style_button_close(close_btn)  # Aplica el estilo personalizado
     close_btn.pack(pady=5)
 
 # Función para descifrar texto 
